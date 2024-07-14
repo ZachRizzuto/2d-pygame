@@ -1,0 +1,1 @@
+A simple 2d game me and my friend are developing to learn pygame
