@@ -1,4 +1,5 @@
 import pygame
+import player_movement
 # Initializing the Pygame library
 pygame.init()
 # Screen Settings in PX
@@ -8,7 +9,7 @@ SCREEN_HEIGHT = 600
 PLAYER_WIDTH = 50
 PLAYER_HEIGHT = 50
 
-player_speed = 300
+player_speed = 5
 
 # Game tick rate pretty much
 clock = pygame.time.Clock()
@@ -40,34 +41,9 @@ while run:
     # Getting the controls
     # You'll notice we multiplay the changing value by delta time, this is how you keep movements with the same ratio.
     key = pygame.key.get_pressed()
-
-
-
-    # Diagnol movement
-    if key[pygame.K_a] and key[pygame.K_w]:
-        movement_vector = pygame.math.Vector2(-player_speed * dt, -player_speed * dt)
-    elif key[pygame.K_a] and key[pygame.K_s]:
-        movement_vector = pygame.math.Vector2(-player_speed * dt, player_speed * dt)
-    elif key[pygame.K_d] and key[pygame.K_w]:
-        movement_vector = pygame.math.Vector2(player_speed * dt, -player_speed * dt)
-    elif key[pygame.K_d] and key[pygame.K_s]:
-        movement_vector = pygame.math.Vector2(player_speed * dt, player_speed * dt)
-        
-    # Left and Right
-    elif key[pygame.K_a] == True:
-        movement_vector = pygame.math.Vector2(-player_speed * dt, 0)
-    elif key[pygame.K_d] == True:
-        movement_vector = pygame.math.Vector2(player_speed * dt, 0)
-
-    # Up and Down
-    elif key[pygame.K_s] == True:
-        movement_vector = pygame.math.Vector2(0, player_speed * dt)
-    elif key[pygame.K_w] == True:
-        movement_vector = pygame.math.Vector2(0, -player_speed * dt)
-
     
+    player_movement.handlePlayerMovement(key, movement_vector, player_speed, dt, player_pos)
 
-    player_pos += movement_vector
     # Really am not sure what this does... I'll have to read on it
     pygame.display.flip()
 
