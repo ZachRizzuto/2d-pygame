@@ -5,6 +5,8 @@ pygame.init()
 # Screen Settings in PX
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
+
+pygame.display.set_caption("2D Game Alpha")
 # Player Dimensions
 PLAYER_WIDTH = 50
 PLAYER_HEIGHT = 50
@@ -21,6 +23,10 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 # player position (there are other ways of doing this but this is how documentation references it to start (I am also learning pygame as we go (I know parenthesis in parenthesis (In parenthesis))))
 player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
 
+PLAYER_SPRITE_IMAGE = pygame.image.load("./assets/boy_down_1.png")
+player_sprite = pygame.transform.scale(PLAYER_SPRITE_IMAGE, (100, 100))
+
+print(player_sprite)
 run = True
 
 while run:
@@ -34,7 +40,8 @@ while run:
     screen.fill((0,0,0))
 
     # Drawing the player to the screen
-    pygame.draw.circle(screen, "red", player_pos, 40)
+    # pygame.draw.circle(screen, "red", player_pos, 40)
+    player_movement.draw_player(screen, player_sprite, player_pos)
 
     movement_vector = pygame.math.Vector2(0, 0)
 
