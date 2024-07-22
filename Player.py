@@ -12,6 +12,7 @@ class Player:
     def draw_player(self, screen):
         self.get_player_sprite()
         screen.blit(self.sprite, self.pos)
+        
 
     def get_player_sprite(self):
         match self.direction:
