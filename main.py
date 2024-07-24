@@ -2,6 +2,7 @@ import pygame
 import Player
 import menu
 import Button
+import math
 
 class main():
     # Game states
@@ -43,33 +44,53 @@ class main():
 
         # menu button
 
-        start_button = Button.Button("Start Game", self.set_game_is_paused, False, font_size=50, scale=2)
+        start_button = Button.Button("Click To Resume", self.set_game_is_paused, False, font_size=30, scale=1, font_color=(0, 0, 255))
+        start_button.img = start_button.img.convert_alpha()
+        # temp background so black isn't as boring
+
+        background_image = pygame.transform.scale(pygame.image.load("./assets/Grass.png"), (32*10, 32*10))
+
+        def draw_background(screen: pygame.SurfaceType, image: pygame.SurfaceType):
+            screen_width = screen.get_width()
+            screen_height = screen.get_height()
+            
+            image_width, image_height = image.get_size()
+
+            tilesX = math.ceil(screen_width / image_width)
+            tilesY = math.ceil(screen_height / image_height)
+
+            for x in range(tilesX):
+                for y in range(tilesY):
+                    screen.blit(image, (x*image_width, y*image_height))
+
+        def draw_pause_background(screen: pygame.SurfaceType):
+            pause_background = pygame.Surface((screen.get_width(), screen.get_height()), pygame.SRCALPHA)
+            pygame.draw.rect(pause_background, (125, 125, 125, 100), [0,0, screen.get_width(), screen.get_width()])
+            
+            
+            start_button.draw_button(pause_background, 0, 0, True)
+            
+            screen.blit(pause_background, (0,0))
+
+
+
 
         while self.run:
-            
-        
+
 
         # Checking if player closes game or not and closing if true
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
-                        self.set_game_is_paused(True)
+                        if(self.game_is_paused):
+                            self.set_game_is_paused(False)
+                        else:
+                            self.set_game_is_paused(True)
                 if event.type == pygame.QUIT:
                     self.run = False
 
         # Refreshes screen by filling it with a random color (not sure how this works for most games but this is how pygame does it for the most part)
             screen.fill((0,0,0))
-
-            while self.game_is_paused == True:
-                screen.fill((0, 0, 0))
-                menu.draw_text(screen, "Game Is Paused", (screen.get_width() // 2), (screen.get_height() // 2))
-                start_button.draw_button(screen, 0, 0)
-                for event in pygame.event.get():
-                    if event.type == pygame.KEYDOWN:
-                        if event.key == pygame.K_ESCAPE:
-                            self.set_game_is_paused(False)
-                pygame.display.flip()
-                
 
             movement_vector = pygame.math.Vector2(0, 0)
 
@@ -77,12 +98,18 @@ class main():
             # You'll notice we multiplay the changing value by delta time, this is how you keep movements with the same ratio.
             key = pygame.key.get_pressed()
             
-            player.handlePlayerMovement(key, movement_vector, dt)
+            if not self.game_is_paused:
+                player.handlePlayerMovement(key, movement_vector, dt)
+                
+            
+
+            draw_background(screen, background_image)
 
             # Drawing the player to the screen
-            # pygame.draw.circle(screen, "red", player_pos, 40)
             player.draw_player(screen)
 
+            if self.game_is_paused:
+                draw_pause_background(screen)
 
             # Really am not sure what this does... I'll have to read on it
             pygame.display.flip()

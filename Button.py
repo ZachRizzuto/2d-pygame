@@ -30,16 +30,23 @@ class Button():
 
     
 
-    def draw_button(self, surface: pygame.SurfaceType, x, y):
+    def draw_button(self, surface: pygame.SurfaceType, x, y, centered=False):
+        button_surface = pygame.Surface((self.img.get_width(), self.img.get_height()), pygame.SRCALPHA)
         #get mouse position
         mouse_pos = pygame.mouse.get_pos()
         #check mouseover and clicked
         if self.rect.collidepoint(mouse_pos):
             if pygame.mouse.get_pressed()[0] == 1:
                  self.cb(self.cb_args)
-                 
-                 
-        self.rect.topleft = (x, y)
-        surface.blit(img, (self.rect.x, self.rect.y))
+
+        button_surface.blit(self.img, (0,0))
+
+        if centered:
+            #matching collision to pos of text
+            self.rect.center = (surface.get_width() // 2, surface.get_height() // 2)
+            surface.blit(button_surface, ((surface.get_width() - self.img.get_width()) // 2, (surface.get_height() - self.img.get_height() ) // 2 ) )
+        else:
+             surface.blit(self.img, x ,y)
+        
 
 pygame.quit()
