@@ -58,7 +58,7 @@ class Player:
 
         if key[pygame.K_w] or key[pygame.K_a] or key[pygame.K_s] or key[pygame.K_d]:
             self.spriteCounter += 1
-            if self.spriteCounter > 20:
+            if self.spriteCounter > 15:
                 self.spriteCounter = 0
                 if self.spriteNum == 1:
                     self.spriteNum = 2
