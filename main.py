@@ -48,8 +48,8 @@ class main():
         start_button.img = start_button.img.convert_alpha()
         # temp background so black isn't as boring
 
-        background_image = pygame.transform.scale(pygame.image.load("./assets/Grass.png"), (32*10, 32*10))
-
+        background_image = pygame.transform.scale(pygame.image.load("./assets/Grass.png"), (32*3.13, 32*3.13))
+        # Draws background image calculated with screen dimensions
         def draw_background(screen: pygame.SurfaceType, image: pygame.SurfaceType):
             screen_width = screen.get_width()
             screen_height = screen.get_height()
@@ -62,7 +62,7 @@ class main():
             for x in range(tilesX):
                 for y in range(tilesY):
                     screen.blit(image, (x*image_width, y*image_height))
-
+        # draws pause background when game is paused
         def draw_pause_background(screen: pygame.SurfaceType):
             pause_background = pygame.Surface((screen.get_width(), screen.get_height()), pygame.SRCALPHA)
             pygame.draw.rect(pause_background, (125, 125, 125, 100), [0,0, screen.get_width(), screen.get_width()])
@@ -86,6 +86,11 @@ class main():
                             self.set_game_is_paused(False)
                         else:
                             self.set_game_is_paused(True)
+                    if event.key == pygame.K_LSHIFT:
+                        player.speed += 2
+                if event.type == pygame.KEYUP:
+                    if event.key == pygame.K_LSHIFT:
+                        player.speed -= 2
                 if event.type == pygame.QUIT:
                     self.run = False
 
@@ -102,12 +107,13 @@ class main():
                 player.handlePlayerMovement(key, movement_vector, dt)
                 
             
-
+            # Drawing background player will be on
             draw_background(screen, background_image)
 
             # Drawing the player to the screen
             player.draw_player(screen)
 
+            # this is here because cascading, it allows it to be drawn on top
             if self.game_is_paused:
                 draw_pause_background(screen)
 
